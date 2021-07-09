@@ -3,6 +3,7 @@ package org.springframework.spring5webapp.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,6 +21,6 @@ public class Author {
     private String firstName;
     private String lastName;
     @ManyToMany(mappedBy = "authors")
-    private List<Book> books;
+    private List<Book> books= new ArrayList<>();
 
 }

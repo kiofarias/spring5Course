@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.spring5webapp.domain.Author;
 import org.springframework.spring5webapp.domain.Book;
+import org.springframework.spring5webapp.domain.Publisher;
 import org.springframework.spring5webapp.repository.AuthorRepository;
 import org.springframework.spring5webapp.repository.BookRepository;
+import org.springframework.spring5webapp.repository.PublisherRepository;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,9 +17,17 @@ public class BootsStrapData implements CommandLineRunner {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final PublisherRepository publisherRepository;
 
     @Override
     public void run(String... args) throws Exception {
+
+        Publisher publisher = new Publisher();
+        publisher.setName("SFG Publishing");
+        publisher.setCity("St Petersburg");
+        publisher.setState("FL");
+
+        publisherRepository.save(publisher);
 
         Author eric = new Author();
         eric.setFirstName("Eric");
@@ -49,7 +59,11 @@ public class BootsStrapData implements CommandLineRunner {
         authorRepository.save(eric);
         bookRepository.save(noEJB);
 
+
+
         System.out.println("Started in Bootstrap");
         System.out.println("Number of books: "+bookRepository.count());
+
+        System.out.println("Publisher count: "+ publisherRepository.count());
     }
 }

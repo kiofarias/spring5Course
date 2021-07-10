@@ -25,4 +25,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private List<Author> authors= new ArrayList<>();
 
+    @ManyToOne
+    private Publisher publisher;
 }

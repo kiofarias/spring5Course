@@ -22,6 +22,8 @@ public class BootsStrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        System.out.println("Started in Bootstrap");
+
         Publisher publisher = new Publisher();
         publisher.setName("SFG Publishing");
         publisher.setCity("St Petersburg");
@@ -32,38 +34,36 @@ public class BootsStrapData implements CommandLineRunner {
         Author eric = new Author();
         eric.setFirstName("Eric");
         eric.setLastName("Evans");
-        Book ddd = new Book();
-        ddd.setTitle("Domain Driven Design");
-        ddd.setIsbn("123123");
-        eric.getBooks().add(ddd);
-        ddd.getAuthors().add(eric);
-
-        authorRepository.save(eric);
-        bookRepository.save(ddd);
-
         Author rod = new Author();
         rod.setFirstName("Rod");
         rod.setLastName("Johnson");
+
+        Book ddd = new Book();
+        ddd.setTitle("Domain Driven Design");
+        ddd.setIsbn("123123");
         Book noEJB = new Book();
         noEJB.setTitle("J2EE Development without EJB");
         noEJB.setIsbn("29618863");
+
+        eric.getBooks().add(ddd);
+        ddd.getAuthors().add(eric);
+        ddd.setPublisher(publisher);
+
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
-
-        authorRepository.save(rod);
-        bookRepository.save(noEJB);
-
-        eric.getBooks().add(noEJB);
-        noEJB.getAuthors().add(eric);
+        noEJB.setPublisher(publisher);
 
         authorRepository.save(eric);
+        authorRepository.save(rod);
+        bookRepository.save(ddd);
         bookRepository.save(noEJB);
 
+        publisher.getBooks().add(ddd);
+        publisher.getBooks().add(noEJB);
+        publisherRepository.save(publisher);
 
-
-        System.out.println("Started in Bootstrap");
         System.out.println("Number of books: "+bookRepository.count());
-
         System.out.println("Publisher count: "+ publisherRepository.count());
+        System.out.println("Books in publisher: "+ publisher.getBooks().size());
     }
 }

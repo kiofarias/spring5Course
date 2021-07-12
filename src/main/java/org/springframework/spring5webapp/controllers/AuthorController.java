@@ -14,7 +14,7 @@ public class AuthorController {
     public AuthorController(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
-:q
+
 
 
     @RequestMapping("/authors")

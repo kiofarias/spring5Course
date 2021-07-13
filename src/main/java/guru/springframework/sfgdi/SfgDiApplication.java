@@ -12,31 +12,37 @@ public class SfgDiApplication {
 
         ApplicationContext ctx = SpringApplication.run(SfgDiApplication.class, args);
 
-        System.out.println("---------Profiles example---------");
+        System.out.println("----------Assignment 4---------");
+
+        PetController petController = ctx.getBean("petController", PetController.class);
+        System.out.println("-------- The Best Pet is ------");
+        System.out.println(petController.whichPetIsTheBest());
+
+        System.out.println("-------Profiles example--------");
 
         I18nController i18nController = (I18nController) ctx.getBean("i18nController");
 
         System.out.println(i18nController.getGreeting());
 
-        System.out.println("---------Primary Bean---------");
+        System.out.println("---------Primary Bean----------");
 
         MyController myController = (MyController) ctx.getBean("myController");
 
         System.out.println(myController.getGreeting());
 
-        System.out.println("---------Property---------");
+        System.out.println("-----------Property------------");
 
         PropertyInjectedController propertyInjectedController =(PropertyInjectedController) ctx.getBean("propertyInjectedController");
 
         System.out.println(propertyInjectedController.getGreeting());
 
-        System.out.println("---------Setter---------");
+        System.out.println("-------------Setter------------");
 
         SetterInjectedController setterInjectedController =(SetterInjectedController) ctx.getBean("setterInjectedController");
 
         System.out.println(setterInjectedController.getGreeting());
 
-        System.out.println("---------Constructor---------");
+        System.out.println("----------Constructor----------");
 
         ConstructorInjectedController constructorInjectedController =(ConstructorInjectedController) ctx.getBean("constructorInjectedController");
 

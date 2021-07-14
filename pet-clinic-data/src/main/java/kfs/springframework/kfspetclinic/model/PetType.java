@@ -1,8 +1,10 @@
 package kfs.springframework.kfspetclinic.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PetType {
     private String name;
 }

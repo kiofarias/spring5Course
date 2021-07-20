@@ -1,11 +1,12 @@
 package kfs.springframework.kfspetclinic.services.map;
 
 import kfs.springframework.kfspetclinic.model.Owner;
-import kfs.springframework.kfspetclinic.services.CrudService;
 import kfs.springframework.kfspetclinic.services.OwnerService;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@Service
 public class OwnerServiceMap extends AbstractMapService<Owner,Long> implements OwnerService {
     @Override
     public Set<Owner> findAll() {

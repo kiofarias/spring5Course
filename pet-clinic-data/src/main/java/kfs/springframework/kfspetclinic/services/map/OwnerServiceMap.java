@@ -2,10 +2,11 @@ package kfs.springframework.kfspetclinic.services.map;
 
 import kfs.springframework.kfspetclinic.model.Owner;
 import kfs.springframework.kfspetclinic.services.CrudService;
+import kfs.springframework.kfspetclinic.services.OwnerService;
 
 import java.util.Set;
 
-public class OwnerServiceMap extends AbstractMapService<Owner,Long> implements CrudService<Owner,Long> {
+public class OwnerServiceMap extends AbstractMapService<Owner,Long> implements OwnerService {
     @Override
     public Set<Owner> findAll() {
         return super.findAll();
@@ -31,4 +32,8 @@ public class OwnerServiceMap extends AbstractMapService<Owner,Long> implements C
         super.delete(object);
     }
 
+    @Override
+    public Owner findByLastName(String lastName) {
+        return null;
+    }
 }

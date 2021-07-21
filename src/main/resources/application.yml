@@ -3,11 +3,16 @@ spring:
     active:
       - EN
       - dog
-      - prod
+      - dev
 guru:
   username: YmlUserName
   password: YmlPassword
   jdbcurl: YmlUrl
+
+guru1:
+  username: YmlGuru1UserName
+  password: YmlGuru1Password
+  jdbcurl: YmlGuru1lUrl
 
 ---
 spring:
@@ -19,3 +24,7 @@ guru:
   password: YmlProdPassword
   jdbcurl: YmlProdUrl
 
+guru1:
+  username: YmlProdGuru1UserName
+  password: YmlProdGuru1Password
+  jdbcurl: YmlProdGuru1lUrl

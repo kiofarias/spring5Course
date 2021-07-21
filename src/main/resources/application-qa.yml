@@ -2,3 +2,8 @@ guru:
   username: YmlQAUserName
   password: YmlQAPassword
   jdbcurl: YmlQAUrl
+
+guru1:
+  username: YmlGuru1QAUserName
+  password: YmlGuru1QAPassword
+  jdbcurl: YmlGuru1QAUrl

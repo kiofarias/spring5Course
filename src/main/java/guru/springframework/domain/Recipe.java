@@ -1,6 +1,6 @@
-package domain;
+package guru.springframework.domain;
 
-import domain.enums.Difficult;
+import guru.springframework.domain.enums.Difficulty;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -19,8 +19,6 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-    //to do add
-    //private Difficult difficult;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
@@ -29,14 +27,14 @@ public class Recipe {
     private Byte[] image;
 
     @Enumerated(value = EnumType.STRING)
-    private Difficult difficult;
+    private Difficulty difficulty;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
     @ManyToMany
     @JoinTable(name = "recipe_category",
-            joinColumns = @JoinColumn(name = "recipe_id"),
+        joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
 
@@ -120,12 +118,12 @@ public class Recipe {
         this.image = image;
     }
 
-    public Difficult getDifficult() {
-        return difficult;
+    public Difficulty getDifficulty() {
+        return difficulty;
     }
 
-    public void setDifficult(Difficult difficult) {
-        this.difficult = difficult;
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     public Notes getNotes() {

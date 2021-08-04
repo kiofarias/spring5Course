@@ -1,6 +1,7 @@
 package kfs.springframework.kfspetclinic.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -12,7 +13,8 @@ public class IndexController {
     }
 
     @RequestMapping("/oups")
-    public String oupsHandler(){
+    public String oupsHandler(Model model){
+        model.addAttribute("type","error");
         return "notimplemented";
     }
 }

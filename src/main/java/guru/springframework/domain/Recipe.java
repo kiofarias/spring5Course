@@ -1,52 +1,36 @@
 package guru.springframework.domain;
 
 import guru.springframework.domain.enums.Difficulty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
 @Entity
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
-    @EqualsAndHashCode.Include
     private String description;
-    @EqualsAndHashCode.Include
     private Integer prepTime;
-    @EqualsAndHashCode.Include
     private Integer cookTime;
-    @EqualsAndHashCode.Include
     private Integer servings;
-    @EqualsAndHashCode.Include
     private String source;
-    @EqualsAndHashCode.Include
     private String url;
 
     @Lob
-    @EqualsAndHashCode.Include
     private String directions;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @Lob
-    @EqualsAndHashCode.Include
     private Byte[] image;
 
     @Enumerated(value = EnumType.STRING)
-    @EqualsAndHashCode.Include
     private Difficulty difficulty;
 
     @OneToOne(cascade = CascadeType.ALL)

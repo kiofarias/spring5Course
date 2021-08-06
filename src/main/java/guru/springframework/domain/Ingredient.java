@@ -1,9 +1,6 @@
 package guru.springframework.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,17 +9,14 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(exclude = {"recipe"})
 @Entity
 public class Ingredient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private Long id;
-    @EqualsAndHashCode.Include
     private String description;
-    @EqualsAndHashCode.Include
     private BigDecimal amount;
 
     @OneToOne(fetch = FetchType.EAGER)

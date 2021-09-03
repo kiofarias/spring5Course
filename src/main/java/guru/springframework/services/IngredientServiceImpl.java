@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.*;
 import java.util.Optional;
 
 @Slf4j
@@ -105,6 +106,34 @@ public class IngredientServiceImpl implements IngredientService {
             }
             //todo check for fail
             return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long recipeId, Long ingredientId) {
+
+        log.debug("Deleting ingredient: "+recipeId+":"+ingredientId);
+
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
+        if(optionalRecipe.isPresent()){
+            Recipe recipe = optionalRecipe.get();
+            Optional<Ingredient> optionalIngredient = recipe
+                    .getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                    .findFirst();
+            if(optionalIngredient.isPresent()){
+                log.debug("found ingredient");
+                Ingredient ingredientToDelete = optionalIngredient.get();
+                ingredientToDelete.setRecipe(null);
+                recipe.getIngredients().remove(ingredientToDelete);
+                recipeRepository.save(recipe);
+            } else{
+                log.debug("Ingredient not found. Id: "+ingredientId);
+            }
+        } else {
+            log.debug("Recipe not found. Id: "+recipeId);
         }
     }
 

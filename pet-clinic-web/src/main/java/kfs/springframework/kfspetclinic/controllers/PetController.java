@@ -60,11 +60,12 @@ public class PetController {
         if(StringUtils.hasLength(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(),true)!= null){
             bindingResult.rejectValue("name","duplicate", "already exists");
         }
-        owner.getPets().add(pet);
         if(bindingResult.hasErrors()){
             model.addAttribute("pet",pet);
             return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
         }
+        pet.setOwner(owner);
+        owner.getPets().add(pet);
         petService.save(pet);
         return "redirect:/owners/"+owner.getId();
     }
@@ -76,17 +77,17 @@ public class PetController {
     }
 
     @PostMapping("/pets/{petId}/edit")
-    public String processUpdateForm(Owner owner, @Valid Pet pet, BindingResult bindingResult, Model model){
+    public String processUpdateForm(@PathVariable Long petId, Owner owner, @Valid Pet pet, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             pet.setOwner(owner);
             model.addAttribute("pet",pet);
             return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
         }
-        owner.getPets().add(pet);
-        petService.save(pet);
+        Pet petUpdated = petService.findById(petId);
+        petUpdated.setName(pet.getName());
+        petUpdated.setBirthDate(pet.getBirthDate());
+        petUpdated.setPetType(pet.getPetType());
+        petService.save(petUpdated);
         return "redirect:/owners/"+owner.getId();
     }
-
-
-
 }

@@ -7,12 +7,12 @@ import kfs.springframework.kfspetclinic.services.VisitService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
+import java.time.LocalDate;
 
 @Controller
 public class VisitController {
@@ -28,6 +28,17 @@ public class VisitController {
         this.petService = petService;
     }
 
+    @InitBinder
+    public void dataBinder(WebDataBinder webDataBinder){
+        webDataBinder.setDisallowedFields("id");
+        webDataBinder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport(){
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException{
+                setValue(LocalDate.parse(text));
+            }
+        });
+    }
+
     @ModelAttribute("visit")
     public Visit loadPetWithVisit(@PathVariable Long petId, Model model){
         Pet pet = petService.findById(petId);
@@ -40,17 +51,16 @@ public class VisitController {
 
     @GetMapping("/owners/*/pets/{petId}/visits/new")
     public String initNewVisitForm(@PathVariable Long petId, Model model){
-
         return VIEWS_VISITS_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
-    public String processNewVisitForm(@PathVariable Long ownerId,@Valid Visit visit, BindingResult bindingResult){
+    public String processNewVisitForm(@Valid Visit visit, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return VIEWS_VISITS_CREATE_OR_UPDATE_FORM;
         }
         visitService.save(visit);
-        return "redirect:/owners/"+ownerId;
+        return "redirect:/owners/{ownerId}";
     }
 
 }

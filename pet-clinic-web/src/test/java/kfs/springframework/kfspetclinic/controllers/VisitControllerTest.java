@@ -13,10 +13,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.UriTemplate;
 
+import java.net.URI;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class VisitControllerTest {
 
+    private static final String PETS_CREATE_OR_UPDATE_VISIT_FORM="pets/createOrUpdateVisitForm";
+    private static final String REDIRECT_OWNERS_1="redirect:/owners/{ownerId}";
+    private static final String YET_ANOTHER_VISIT_DESCRIPTION="yet another visit";
+
     @Mock
     PetService petService;
 
@@ -38,14 +48,34 @@ class VisitControllerTest {
     @InjectMocks
     VisitController visitController;
 
-    Pet pet;
-
     MockMvc mockMvc;
+
+    private final UriTemplate visitUriTemplate= new UriTemplate("/owners/{ownerId}/pets/{petId}/visits/new");
+    private final Map<String,String> uriVariables = new HashMap<>();
+    private URI visitUri;
 
     @BeforeEach
     void setUp() {
-
-        pet = Pet.builder().id(2L).build();
+        Long petId = 1L;
+        Long ownerId = 1L;
+        when(petService.findById(anyLong()))
+                .thenReturn(
+                        Pet.builder()
+                                .id(petId)
+                                .birthDate(LocalDate.of(2022,1,8))
+                                .name("Ddd").visits(new HashSet<>())
+                                .owner(Owner.builder()
+                                        .id(ownerId)
+                                        .lastName("Farias")
+                                        .firstName("Francisco")
+                                        .build())
+                                .petType(PetType.builder().name("Dog").build())
+                                .build()
+                );
+        uriVariables.clear();
+        uriVariables.put("ownerId", ownerId.toString());
+        uriVariables.put("petId", petId.toString());
+        visitUri = visitUriTemplate.expand(uriVariables);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(visitController)
                 .build();
@@ -54,24 +84,23 @@ class VisitControllerTest {
 
     @Test
     void initNewVisitForm() throws Exception{
-        when(petService.findById(anyLong())).thenReturn(pet);
-        mockMvc.perform(get("/owners/1/pets/2/visits/new"))
+        mockMvc.perform(get(visitUri))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("pet"))
                 .andExpect(model().attributeExists("visit"))
-                .andExpect(view().name("pets/createOrUpdateVisitForm"));
+                .andExpect(view().name(PETS_CREATE_OR_UPDATE_VISIT_FORM));
         verify(petService,times(1)).findById(anyLong());
-        verifyNoInteractions(visitService);
     }
 
     @Test
     void processNewVisitForm() throws Exception {
-        when(petService.findById(anyLong())).thenReturn(pet);
-        mockMvc.perform(post("/owners/1/pets/2/visits/new"))
+        mockMvc.perform(post(visitUri)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("date", "2022-01-08")
+                        .param("description", YET_ANOTHER_VISIT_DESCRIPTION))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists("pet"))
                 .andExpect(model().attributeExists("visit"))
-                .andExpect(view().name("redirect:/owners/1"));
+                .andExpect(view().name(REDIRECT_OWNERS_1));
         verify(petService,times(1)).findById(anyLong());
         verify(visitService,times(1)).save(any());
     }

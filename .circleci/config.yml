@@ -24,10 +24,8 @@ jobs:
           name: Test
           command: mvn test cobertura:cobertura
       # Test Send to codecov!
-      - run:
-          name: Send to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
-
+      - codecov/upload:
+          file: ./target/site/cobertura/coverage.xml
 workflows:
   # Below is the definition of your workflow.
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.

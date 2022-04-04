@@ -33,7 +33,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-#      - run: gradle dependencies
+      - run: chmod +x gradlew
+
+      - run: ./gradlew dependencies
 
       - save_cache:
           paths:
@@ -41,7 +43,7 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests! and gen code coverage
-      - run: ./gradlew dependencies clean test jacocoTestReport
+      - run: ./gradlew clean test jacocoTestReport
 
       - run:
           name: Save test results

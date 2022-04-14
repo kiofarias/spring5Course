@@ -1,12 +1,12 @@
-package br.com.regaliatec.springframework.springrestclientexamples;
+package br.com.regaliatec.springframework;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringRestClientExamplesApplication {
+public class Spring5MvcRestApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringRestClientExamplesApplication.class, args);
+		SpringApplication.run(Spring5MvcRestApplication.class, args);
 	}
 }

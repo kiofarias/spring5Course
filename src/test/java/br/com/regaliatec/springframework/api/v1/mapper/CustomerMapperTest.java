@@ -12,6 +12,7 @@ public class CustomerMapperTest {
     public static final String FIRSTNAME = "Jonh";
     public static final String LASTNAME = "Wick";
     public static final long ID = 1L;
+    public static final String CUSTOMERURL= "/api/customer/1";
 
     CustomerMapper customerMapper = CustomerMapper.INSTANCE;
 
@@ -19,13 +20,11 @@ public class CustomerMapperTest {
     public void customerToCustomerDTO() throws Exception {
         //given
         Customer customer = new Customer();
-        customer.setId(ID);
         customer.setFirstName(FIRSTNAME);
         customer.setLastName(LASTNAME);
         //when
         CustomerDTO customerDTO = customerMapper.customerToCustomerDTO(customer);
         //then
-        assertEquals(customerDTO.getId(),Long.valueOf(ID));
         assertEquals(customerDTO.getFirstName(),FIRSTNAME);
         assertEquals(customerDTO.getLastName(),LASTNAME);
     }

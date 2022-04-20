@@ -1,5 +1,7 @@
 package br.com.regaliatec.springframework.services;
 
+import br.com.regaliatec.springframework.api.v1.mapper.CustomerMapper;
+import br.com.regaliatec.springframework.api.v1.mapper.CustomerMapperImpl;
 import br.com.regaliatec.springframework.api.v1.model.CustomerDTO;
 import br.com.regaliatec.springframework.domain.Customer;
 import br.com.regaliatec.springframework.repositories.CustomerRepository;
@@ -13,13 +15,20 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 public class CustomerServiceTest {
 
 
+    public static final String FIRST_NAME = "Michale";
+    public static final String LAST_NAME = "Weston";
+    public static final Long ID = 1l;
+    public static final String CUSTOMER_URL = "/api/v1/customers/1";
     CustomerService customerService;
+
+    CustomerMapper customerMapper;
 
     @Mock
     CustomerRepository customerRepository;
@@ -29,6 +38,7 @@ public class CustomerServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         customerService = new CustomerServiceImpl(customerRepository);
+        customerMapper = CustomerMapper.INSTANCE;
     }
 
     @Test
@@ -47,14 +57,36 @@ public class CustomerServiceTest {
     public void getCustomerById() throws Exception{
         //given
         Customer customer1 = new Customer();
-        customer1.setId(1l);
-        customer1.setFirstName("Michale");
-        customer1.setLastName("Weston");
+        customer1.setId(ID);
+        customer1.setFirstName(FIRST_NAME);
+        customer1.setLastName(LAST_NAME);
         when(customerRepository.findById(anyLong())).thenReturn(Optional.ofNullable(customer1));
         //when
         CustomerDTO customerDTO = customerService.getCustomerById(1L);
         //then
-        assertEquals("Michale", customerDTO.getFirstName());
+        assertEquals(FIRST_NAME, customerDTO.getFirstName());
+        assertEquals(LAST_NAME, customerDTO.getLastName());
+        assertEquals(CUSTOMER_URL, customerDTO.getCustomerUrl());
 
+    }
+
+    @Test
+    public void createNewCustomer() throws Exception{
+        //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName(FIRST_NAME);
+        customerDTO.setLastName(LAST_NAME);
+
+        Customer savedCustomer = customerMapper.customerDTOToCustomer(customerDTO);
+        savedCustomer.setId(ID);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        //when
+        CustomerDTO savedDTO = customerService.createNewCustomer(customerDTO);
+
+        //then
+        assertEquals(FIRST_NAME, savedDTO.getFirstName());
+        assertEquals(LAST_NAME, savedDTO.getLastName());
+        assertEquals(CUSTOMER_URL, savedDTO.getCustomerUrl());
     }
 }

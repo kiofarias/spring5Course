@@ -1,7 +1,6 @@
 package br.com.regaliatec.springframework.services;
 
 import br.com.regaliatec.springframework.api.v1.mapper.CustomerMapper;
-import br.com.regaliatec.springframework.api.v1.mapper.CustomerMapperImpl;
 import br.com.regaliatec.springframework.api.v1.model.CustomerDTO;
 import br.com.regaliatec.springframework.domain.Customer;
 import br.com.regaliatec.springframework.repositories.CustomerRepository;
@@ -50,10 +49,21 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
-        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+        return saveAndReturnDTO(customerMapper.customerDTOToCustomer(customerDTO));
+    }
+
+    public CustomerDTO saveAndReturnDTO(Customer customer){
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO savedcustomerDTO = customerMapper.customerToCustomerDTO(savedCustomer);
         savedcustomerDTO.setCustomerUrl("/api/v1/customers/"+savedCustomer.getId());
         return savedcustomerDTO;
     }
+
+    @Override
+    public CustomerDTO updateCustomerById(Long id, CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+        customer.setId(id);
+        return saveAndReturnDTO(customer);
+    }
+
 }

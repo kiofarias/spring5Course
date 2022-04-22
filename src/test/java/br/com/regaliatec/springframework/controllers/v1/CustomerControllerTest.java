@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -87,6 +88,30 @@ public class CustomerControllerTest extends AbstractRestControllerTest{
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(asJsonString(customerDTO)))
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName", equalTo("John")))
+                .andExpect(jsonPath("$.lastName",equalTo("Wick")))
+                .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
+
+    }
+
+    @Test
+    public void updateCustomer() throws Exception{
+        //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName("John");
+        customerDTO.setLastName("Wick");
+
+        CustomerDTO returnedCustomerDTO = new CustomerDTO();
+        returnedCustomerDTO.setFirstName(customerDTO.getFirstName());
+        returnedCustomerDTO.setLastName(customerDTO.getLastName());
+        returnedCustomerDTO.setCustomerUrl("/api/v1/customers/1");
+
+        when(customerService.updateCustomerById(anyLong(),(any(CustomerDTO.class)))).thenReturn(returnedCustomerDTO);
+        //when and then
+        mockMvc.perform(put("/api/v1/customers/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo("John")))
                 .andExpect(jsonPath("$.lastName",equalTo("Wick")))
                 .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));

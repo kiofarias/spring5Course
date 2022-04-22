@@ -109,6 +109,6 @@ public class CustomerServiceTest {
         assertEquals(FIRST_NAME, savedDTO.getFirstName());
         assertEquals(LAST_NAME, savedDTO.getLastName());
         assertEquals(CUSTOMER_URL, savedDTO.getCustomerUrl());
-
     }
+
 }

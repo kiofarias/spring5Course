@@ -3,6 +3,7 @@ package br.com.regaliatec.springframework.services;
 import br.com.regaliatec.springframework.api.v1.mapper.CustomerMapper;
 import br.com.regaliatec.springframework.api.v1.mapper.CustomerMapperImpl;
 import br.com.regaliatec.springframework.api.v1.model.CustomerDTO;
+import br.com.regaliatec.springframework.controllers.v1.CustomerController;
 import br.com.regaliatec.springframework.domain.Customer;
 import br.com.regaliatec.springframework.repositories.CustomerRepository;
 import org.junit.Before;
@@ -25,7 +26,7 @@ public class CustomerServiceTest {
     public static final String FIRST_NAME = "Michale";
     public static final String LAST_NAME = "Weston";
     public static final Long ID = 1l;
-    public static final String CUSTOMER_URL = "/api/v1/customers/1";
+    public static final String CUSTOMER_URL = CustomerController.BASE_URL+ "/1";
     CustomerService customerService;
 
     CustomerMapper customerMapper;

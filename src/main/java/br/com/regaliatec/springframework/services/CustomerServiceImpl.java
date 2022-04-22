@@ -5,6 +5,7 @@ import br.com.regaliatec.springframework.api.v1.model.CustomerDTO;
 import br.com.regaliatec.springframework.controllers.v1.CustomerController;
 import br.com.regaliatec.springframework.domain.Customer;
 import br.com.regaliatec.springframework.repositories.CustomerRepository;
+import br.com.regaliatec.springframework.services.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService{
                     customerDTO.setCustomerUrl(getCustomerUrl(customer));
                     return customerDTO;
                 })
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class CustomerServiceImpl implements CustomerService{
                     savedcustomerDTO.setCustomerUrl(getCustomerUrl(savedCustomer));
                     return savedcustomerDTO;
                 })
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override

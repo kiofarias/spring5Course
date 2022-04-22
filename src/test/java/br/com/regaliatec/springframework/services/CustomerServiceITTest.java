@@ -63,6 +63,7 @@ public class CustomerServiceITTest {
 
     @Test
     public void pathCustomerLastName() throws Exception{
+
         //given
         String updateLastName = "updateLastName";
         Long id = getCustomerIdValue();
@@ -80,6 +81,7 @@ public class CustomerServiceITTest {
         assertEquals(updateLastName,patchCustomerDTO.getLastName());
         assertThat(originalLastName,not(equalTo(patchCustomerDTO.getLastName())));
         assertThat(originalFirstName,equalTo(patchCustomerDTO.getFirstName()));
+
     }
 
     private Long getCustomerIdValue(){

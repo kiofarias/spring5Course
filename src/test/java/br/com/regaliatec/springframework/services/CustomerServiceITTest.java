@@ -5,6 +5,7 @@ import br.com.regaliatec.springframework.bootstrap.Bootstrap;
 import br.com.regaliatec.springframework.domain.Customer;
 import br.com.regaliatec.springframework.repositories.CategoryRepository;
 import br.com.regaliatec.springframework.repositories.CustomerRepository;
+import br.com.regaliatec.springframework.repositories.VendorRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,10 @@ public class CustomerServiceITTest {
     @Autowired
     CategoryRepository categoryRepository;
 
+
+    @Autowired
+    VendorRepository vendorRepository;
+
     CustomerService customerService;
 
     @Before
@@ -35,7 +40,7 @@ public class CustomerServiceITTest {
         System.out.println("Loading Customer Data");
         System.out.println(customerRepository.findAll().size());
 
-        Bootstrap bootstrap = new Bootstrap(categoryRepository,customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository,customerRepository, vendorRepository);
         bootstrap.run();
         customerService = new CustomerServiceImpl(customerRepository);
     }

@@ -13,6 +13,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -35,13 +38,13 @@ public class CategoryControllerTest {
 
     @Test
     public void getAllCategories() {
-        given(categoryRepository.findAll()).willReturn(Flux.just(
-                Category.builder().description("Cat1").build()
-                ,Category.builder().description("Cat2").build()));
+        Flux<Category> categories = Flux.just(Category.builder().description("Cat1").build(),Category.builder().description("Cat2").build());
+        given(categoryRepository.findAll()).willReturn(categories);
 
         webTestClient.get().uri("/api/v1/categories")
                 .exchange()
                 .expectBodyList(Category.class)
+                .isEqualTo(categories.collectList().block())
                 .hasSize(2);
         then(categoryRepository).should(times(1)).findAll();
 
@@ -49,12 +52,15 @@ public class CategoryControllerTest {
 
     @Test
     public void getCategoryById() {
-        given(categoryRepository.findById(any(String.class))).willReturn(Mono.just(
-                Category.builder().description("Cat1").build()));
+
+        Mono<Category> categoryMono = Mono.just(
+                Category.builder().description("Cat1").build());
+        given(categoryRepository.findById(any(String.class))).willReturn(categoryMono);
 
         webTestClient.get().uri("/api/v1/categories/someid")
                 .exchange()
-                .expectBody(Category.class);
+                .expectBody(Category.class)
+                .isEqualTo(categoryMono.block());
         then(categoryRepository).should(times(1)).findById(any(String.class));
 
     }
@@ -76,4 +82,22 @@ public class CategoryControllerTest {
 
         then(categoryRepository).should(times(1)).saveAll(any(Publisher.class));
     }
+    @Test
+    public void update(){
+        Mono<Category> categoryMono = Mono.just(Category.builder().description("test").build());
+        Mono<Category> categoryMonoSaved = Mono.just(Category.builder().description("descr").build());
+        given(categoryRepository.save(any(Category.class))).willReturn(categoryMonoSaved);
+
+        webTestClient.put()
+                .uri("/api/v1/categories/someId")
+                .body(categoryMono,Category.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(Category.class)
+                .isEqualTo(categoryMonoSaved.block());
+
+        then(categoryRepository).should(times(1)).save(any(Category.class));
+    }
+
 }

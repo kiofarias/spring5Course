@@ -1,6 +1,7 @@
 package br.com.springframework.spring5webfluxrest.controller;
 
 import br.com.springframework.spring5webfluxrest.domain.Category;
+import br.com.springframework.spring5webfluxrest.domain.Vendor;
 import br.com.springframework.spring5webfluxrest.repository.CategoryRepository;
 import org.junit.Before;
 import org.junit.Test;

@@ -100,4 +100,25 @@ public class CategoryControllerTest {
         then(categoryRepository).should(times(1)).save(any(Category.class));
     }
 
+    @Test
+    public void patch(){
+        Mono<Category> categoryMono = Mono.just(Category.builder().description("test").build());
+        Mono<Category> categoryMonoSaved = Mono.just(Category.builder().description("Saved").build());
+
+        given(categoryRepository.findById(any(String.class))).willReturn(categoryMono);
+        given(categoryRepository.save(any(Category.class))).willReturn(categoryMonoSaved);
+
+        webTestClient.patch()
+                .uri("/api/v1/categories/someId")
+                .body(categoryMono,Category.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(Category.class)
+                .isEqualTo(categoryMonoSaved.block());
+
+        then(categoryRepository).should(times(1)).findById(any(String.class));
+        then(categoryRepository).should(times(1)).save(any(Category.class));
+    }
+
 }

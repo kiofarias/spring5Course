@@ -75,4 +75,24 @@ public class VendorControllerTest {
 
         then(vendorRepository).should(times(1)).saveAll(any(Publisher.class));
     }
+
+    @Test
+    public void updateVendor() {
+        //given
+        Mono<Vendor> vendorMono = Mono.just(Vendor.builder().firstName("Test1").lastName("Inc.").build());
+        Mono<Vendor> vendorMonoSaved = Mono.just(Vendor.builder().firstName("Test1Saved").lastName("Inc.").build());
+        given(vendorRepository.save(any(Vendor.class))).willReturn(vendorMonoSaved);
+
+        //when and then
+
+        webTestClient.put().uri("/api/v1/vendors/someId")
+                .body(vendorMono,Vendor.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(Vendor.class)
+                .isEqualTo(vendorMonoSaved.block());
+
+        then(vendorRepository).should(times(1)).save(any(Vendor.class));
+    }
 }

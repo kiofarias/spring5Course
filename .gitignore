@@ -2,8 +2,8 @@
 # Project Specific
 ######################
 /build/www/**
-/src/test/javascript/coverage/
-/src/test/javascript/PhantomJS*/
+/spring5-mvc-rest-app/src/test/javascript/coverage/
+/spring5-mvc-rest-app/src/test/javascript/PhantomJS*/
 
 ######################
 # Node
@@ -35,7 +35,7 @@ local.properties
 .settings/
 .loadpath
 .factorypath
-/src/main/resources/rebel.xml
+/spring5-mvc-rest-app/src/main/resources/rebel.xml
 
 # External tool builders
 .externalToolBuilders/**
